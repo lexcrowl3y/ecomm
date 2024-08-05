@@ -1,5 +1,5 @@
 class WebhooksController < ApplicationController
-  skip_forgery_protection
+  skip_forgery_protection  
 
   def stripe
     stripe_secret_key = Rails.application.credentials.dig(:stripe, :secret_key)
@@ -8,7 +8,7 @@ class WebhooksController < ApplicationController
     sig_header = request.env["HTTP_STRIPE_SIGNATURE"]
     endpoint_secret = Rails.application.credentials.dig(:stripe, :webhook_secret) 
     event = nil
-
+    
     begin
       event = Stripe::Webhook.construct_event(payload, sig_header, endpoint_secret)
     rescue JSON::ParserError => e
@@ -30,7 +30,7 @@ class WebhooksController < ApplicationController
       else
         address = ""
       end
-      order = Order.create!(customer_email: session["customer_details"]["email"], total: session["amount_total"], address: address, fulfilled: false)
+      order = Order.create!(customer_name: session["customer_details"]["name"], customer_email: session["customer_details"]["email"], total: session["amount_total"], address: address, fulfilled: false)
       full_session = Stripe::Checkout::Session.retrieve({
         id: session.id,
         expand: ['line_items']
