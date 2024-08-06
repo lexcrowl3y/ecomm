@@ -30,8 +30,8 @@ class CheckoutsController < ApplicationController
     session = Stripe::Checkout::Session.create(
       mode: "payment",
       line_items: line_items,
-      success_url: "http://localhost:3000/success",
-      cancel_url: "http://localhost:3000/cancel",
+      success_url: "https://mysite-tywx.onrender.com/success", # replace these in development env
+      cancel_url: "https://mysite-tywx.onrender.com/cancel",
       shipping_address_collection: { 
         allowed_countries: ['US', 'CA']
       }
@@ -48,3 +48,6 @@ class CheckoutsController < ApplicationController
     render :cancel
   end
 end
+# USE IN DEVELOPMENT ENV
+#http://localhost:3000/success
+#http://localhost:3000/cancel
